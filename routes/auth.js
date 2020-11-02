@@ -23,7 +23,7 @@ authRouter.route('/')
      .then(user=>{
          if (!user){
              res.statusCode=400;
-             res.json({msg:'User does not exist exist'})
+             res.json({msg:'User does not exist'})
          }
      
      
