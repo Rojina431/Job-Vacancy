@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios';
 import { Button } from 'reactstrap';
- 
+import { postFavorite,removeFavorite } from '../../../redux/acceptAction'
+import { connect } from "react-redux"; 
 
 function Accept(props) {
     
-    const [Accepted, setAccepted] = useState(false)
+    const [Accepted, setAccepted] = useState(props.accept)
     const variables = {
         jobRole:props.jobRole,
         name:props.name,
@@ -35,10 +36,13 @@ function Accept(props) {
 
         if (Accepted) {
             
-            axios.post('/api/jobs/removeAccepted', variables)
+            axios.post('/api/jobs/removeAccepted', (variables))
                 .then(response => {
                     if (response.data.success) {
                         setAccepted(!Accepted)
+                        props.removeFavorite(!Accepted);
+                        console.log(props.accept)
+                        localStorage.setItem('doc',null)
                     } else {
                         alert('Failed to Remove From Accepted')
                     }
@@ -48,16 +52,20 @@ function Accept(props) {
             }
          else{
         
-            axios.post('/api/jobs/addToAccepted', variables)
+            axios.post('/api/jobs/addToAccepted', (variables))
             .then(response => {
                 if (response.data.success) {
                     setAccepted(!Accepted)
+                    props.postFavorite(!Accepted)
+                    localStorage.setItem('doc',variables.userFrom)
+                    console.log(props.accept)
                 } else {
                     alert('Failed to Add To Accepted')
                 }
             }).catch(err=>{
                 alert(err.msg)
             })
+            
         }     
         }
  
@@ -69,4 +77,9 @@ function Accept(props) {
     )
 }
 
-export default Accept
+const mapStateToProps = state => ({
+    accept:state.accept.accept
+  });
+  export default connect(
+    mapStateToProps,{removeFavorite,postFavorite}
+  )(Accept)

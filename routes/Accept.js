@@ -27,7 +27,8 @@ acceptRouter.route('/addToAccepted')
 
     accept.save((err, doc) => {
         if (err) return res.json({ success: false, err })
-        return res.status(200).json({ success: true,doc })
+        //return res.status(200).json({ success: true,doc })
+        return res.status(200).json({ success: true,doc})
     })
 
 });

@@ -2,11 +2,12 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios';
 import {Table} from 'reactstrap';
 import { Fade} from 'react-animation-components';
+import { removeFavorite } from '../../../redux/acceptAction'
+import { connect } from "react-redux"; 
 
-function AcceptPage() {
+function AcceptPage(props) {
 
     const [AcceptedJob, setAcceptedJob] = useState([])
-
     const variables = {
         userFrom: JSON.parse(localStorage.getItem('creds')) 
     }
@@ -37,6 +38,9 @@ function AcceptPage() {
         .then(response=> {
             if(response.data.success) {
                 fetchAccepted();
+                props.removeFavorite(!(props.accept));
+                localStorage.setItem('doc',null)
+                console.log(props.accept)
             } else {
                 console.log("hello")
                 alert(' Failed to remove from accepted')
@@ -76,4 +80,9 @@ function AcceptPage() {
 }
 
 
-export default AcceptPage
+const mapStateToProps = state => ({
+    accept:state.accept.accept
+  });
+  export default connect(
+    mapStateToProps,{removeFavorite}
+  )(AcceptPage)

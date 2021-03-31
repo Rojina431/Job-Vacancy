@@ -9,4 +9,5 @@ export const STATUS='STATUS';
 export const POST_SUCCESS='POST_SUCCESS'
 export const GET_SUCCESS='GET_SUCCESS'
 export const ADD_ACCEPT = 'ADD_ACCEPT';
+export const REMOVE_ACCEPT = 'REMOVE_ACCEPT';
 export const ACCEPT_SUCCESS='ACCEPT_SUCCESS'
