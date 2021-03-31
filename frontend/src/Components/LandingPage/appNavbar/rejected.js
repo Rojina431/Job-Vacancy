@@ -2,10 +2,13 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios';
 import {Table} from 'reactstrap';
 import { Fade} from 'react-animation-components';
+import { removeRejected } from '../../../redux/acceptAction'
+import { connect } from "react-redux";
 
-function RejectedPage() {
+function RejectedPage(props) {
 
     const [RejectedJob, setRejectedJob] = useState([])
+    const [r,setr]=useState(props.reject)
 
     const variables = {
         userFrom: JSON.parse(localStorage.getItem('creds')) 
@@ -37,6 +40,8 @@ function RejectedPage() {
         .then(response=> {
             if(response.data.success) {
                 fetchRejected();
+                props.removeRejected(!r);
+                localStorage.setItem('reject',null)
             } else {
                 console.log("hello")
                 alert(' Failed to remove from Rejected')
@@ -76,4 +81,9 @@ function RejectedPage() {
 }
 
 
-export default RejectedPage
+const mapStateToProps = state => ({
+    reject:state.accept.reject
+  });
+  export default connect(
+    mapStateToProps,{removeRejected}
+  ) (RejectedPage)

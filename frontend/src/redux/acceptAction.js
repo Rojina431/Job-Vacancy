@@ -1,4 +1,4 @@
-import axios from "axios";
+
 import * as ActionTypes from './actionTypes'
 
 export const postFavorite = (acceptance) => (dispatch) => {
@@ -9,8 +9,8 @@ export const postFavorite = (acceptance) => (dispatch) => {
   }    
   }
 
-  export const removeFavorite = (rejection) => (dispatch) => {
-    if(!rejection){
+  export const removeFavorite = (acceptance) => (dispatch) => {
+    if(acceptance===false){
       
       dispatch({
         type:ActionTypes.REMOVE_ACCEPT,
@@ -18,5 +18,23 @@ export const postFavorite = (acceptance) => (dispatch) => {
     }
       
   }
+
+  export const postRejected = (rejection) => (dispatch) => {
+    if(rejection){
+      dispatch({
+        type:ActionTypes.ADD_REJECT
+      })
+    }    
+    }
+  
+    export const removeRejected = (rejection) => (dispatch) => {
+      if(!rejection){
+        
+        dispatch({
+          type:ActionTypes.REMOVE_REJECT,
+        })
+      }
+        
+    }
   
     

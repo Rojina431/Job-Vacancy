@@ -10,4 +10,6 @@ export const POST_SUCCESS='POST_SUCCESS'
 export const GET_SUCCESS='GET_SUCCESS'
 export const ADD_ACCEPT = 'ADD_ACCEPT';
 export const REMOVE_ACCEPT = 'REMOVE_ACCEPT';
+export const ADD_REJECT = 'ADD_REJECT';
+export const REMOVE_REJECT = 'REMOVE_REJECT';
 export const ACCEPT_SUCCESS='ACCEPT_SUCCESS'

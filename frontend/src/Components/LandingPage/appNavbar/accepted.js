@@ -8,6 +8,7 @@ import { connect } from "react-redux";
 function AcceptPage(props) {
 
     const [AcceptedJob, setAcceptedJob] = useState([])
+    const [a,seta]=useState(props.accept)
     const variables = {
         userFrom: JSON.parse(localStorage.getItem('creds')) 
     }
@@ -37,10 +38,10 @@ function AcceptPage(props) {
         axios.post('/api/jobs/removeAccepted',variable)
         .then(response=> {
             if(response.data.success) {
-                fetchAccepted();
-                props.removeFavorite(!(props.accept));
-                localStorage.setItem('doc',null)
                 console.log(props.accept)
+                props.removeFavorite(!a);
+                localStorage.setItem('accept',null)
+                fetchAccepted();
             } else {
                 console.log("hello")
                 alert(' Failed to remove from accepted')

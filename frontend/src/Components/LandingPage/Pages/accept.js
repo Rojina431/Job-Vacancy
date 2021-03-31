@@ -7,6 +7,8 @@ import { connect } from "react-redux";
 function Accept(props) {
     
     const [Accepted, setAccepted] = useState(props.accept)
+    const [rejected, setrejected] = useState(props.reject)
+
     const variables = {
         jobRole:props.jobRole,
         name:props.name,
@@ -41,8 +43,7 @@ function Accept(props) {
                     if (response.data.success) {
                         setAccepted(!Accepted)
                         props.removeFavorite(!Accepted);
-                        console.log(props.accept)
-                        localStorage.setItem('doc',null)
+                        localStorage.setItem('accept',null)
                     } else {
                         alert('Failed to Remove From Accepted')
                     }
@@ -51,13 +52,14 @@ function Accept(props) {
                 })
             }
          else{
-        
+           if(!rejected){
             axios.post('/api/jobs/addToAccepted', (variables))
             .then(response => {
                 if (response.data.success) {
                     setAccepted(!Accepted)
                     props.postFavorite(!Accepted)
-                    localStorage.setItem('doc',variables.userFrom)
+                    localStorage.setItem('accept',variables.userFrom)
+                    localStorage.setItem('reject',null)
                     console.log(props.accept)
                 } else {
                     alert('Failed to Add To Accepted')
@@ -65,7 +67,9 @@ function Accept(props) {
             }).catch(err=>{
                 alert(err.msg)
             })
-            
+           }else{
+              alert("Remove from rejected to accept!") 
+           }
         }     
         }
  
@@ -78,7 +82,8 @@ function Accept(props) {
 }
 
 const mapStateToProps = state => ({
-    accept:state.accept.accept
+    accept:state.accept.accept,
+    reject:state.accept.reject
   });
   export default connect(
     mapStateToProps,{removeFavorite,postFavorite}

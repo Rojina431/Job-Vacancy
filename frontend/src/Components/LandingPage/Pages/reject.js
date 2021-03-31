@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios';
 import { Button } from 'reactstrap';
-import { postFavorite } from '../../../redux/acceptAction'
+import { postRejected,removeRejected } from '../../../redux/acceptAction'
 import { connect } from "react-redux"; 
 
 function Reject(props) {
 
-    const [Rejected, setRejected] = useState(false)
+    const [Rejected, setRejected] = useState(props.reject)
     const [accepted,setaccepted]=useState(props.accept)
     const variables = {
         jobRole:props.jobRole,
@@ -28,6 +28,7 @@ function Reject(props) {
                 }
             })
             console.log(Rejected)
+            console.log(accepted)
 
     }, [])
 
@@ -38,6 +39,8 @@ function Reject(props) {
                 .then(response => {
                     if (response.data.success) {
                         setRejected(!Rejected)
+                        props.removeRejected(!Rejected);
+                        localStorage.setItem('reject',null)
                     } else {
                         alert('Failed to Remove From Rejected')
                     }
@@ -47,10 +50,14 @@ function Reject(props) {
             }
          else{
             if(!accepted){
+                console.log(accepted)
                 axios.post('/api/jobs/addToRejected', variables)
             .then(response => {
                 if (response.data.success) {
                     setRejected(!Rejected)
+                    props.postRejected(!Rejected)
+                    localStorage.setItem('reject',variables.userFrom)
+                    localStorage.setItem('accept',null)
                 } else {
                     alert('Failed to Add To Rejected')
                 }
@@ -72,9 +79,10 @@ function Reject(props) {
 }
 
 const mapStateToProps = state => ({
-    accept:state.accept.accept
+    accept:state.accept.accept,
+    reject:state.accept.reject
   });
   export default connect(
-    mapStateToProps,{postFavorite}
+    mapStateToProps,{postRejected,removeRejected}
   ) (Reject)
 
