@@ -4,43 +4,51 @@ import {Row} from 'reactstrap';
 import GridImage from './cardJob';
 import { Fade} from 'react-animation-components';
 import './search.css';
-
+import { shallowEqual,useDispatch,useSelector} from 'react-redux'
+import {jobList} from '../../../redux/jobAction'
+import { Redirect } from 'react-router';
 
 function JobPage() {
 
-    const [Job, setJob] = useState([])
+    const dispatch=useDispatch()
+    const Job=useSelector(state=>state.job.jobs)
+    const { isAuthenticated, status } = useSelector(state => ({
+        isAuthenticated: state.users,
+        status: state.status,
+      }), shallowEqual);
     const [search,setSearch]=useState([])
-    const [error,setError]=useState(false)
+    const [redirect,setRedirect]=useState([false])
+    const [error,setError]=useState(false);
+   
 
     useEffect(() => {
         fetchPostedJob();
-
+        Direct();
 }, [])
 
+const  Direct=()=>{
+    if(isAuthenticated){
+        if(status.status==="Candidate"){
+            setRedirect(true)
+        }else{
+            setRedirect(false) ;
+         }
+    }else{
+       setRedirect(false) ;
+    }
+}
 
     const fetchPostedJob = () => {
-        var token=JSON.parse(localStorage.getItem('token'));
-
-       const url='/api/jobs/getJobList'
-        axios.post('/api/jobs/getJobList',{}, {headers:{"Authorization":'Bearer'+' '+token}})
-        .then(response => {
-            if (response.data.success) {
-                localStorage.setItem("Job",JSON.stringify(response.data.jobs))
-                setJob(response.data.jobs)
-            } else {
-                alert('Failed to get posted job')
-            }
-        }).catch((err)=>{
-            setError(true)
-        })
+      dispatch(jobList())
     }
 
     function Search(job){
        return job.filter((job)=>job.jobRole.toLowerCase().indexOf(search)>-1);
     }
 
+    if(redirect){
     return (
-       
+
         <div style={{ width: '85%', margin: '3rem auto' }}>
             <div className="container mb-5" >
             <label for="search">
@@ -67,6 +75,12 @@ function JobPage() {
                </Fade> 
         </div>
     )
-}
+                      }else{
+                          return(
+                              <Redirect to='/login'/>
+                          )
+                      }
+                      }
 
-export default JobPage
+
+export default (JobPage)

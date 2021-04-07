@@ -4,7 +4,7 @@ import Accept from './accept';
 import Reject from './reject';
 
 function MainImage(props){
-
+    console.log(props.jobRole)
     return(
         
         <div  style={{width:'100%'}} className="m-1" >

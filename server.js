@@ -15,7 +15,7 @@ const bodyParser=require('body-parser')
 
 app.use(bodyParser.json())
 const db=config.mongoURI
-mongoose.connect(db)
+mongoose.connect(db, { useNewUrlParser: true ,useCreateIndex: true,  useUnifiedTopology: true})
 .then(()=>{
     console.log("Connected to server")
 }).catch(err=>{

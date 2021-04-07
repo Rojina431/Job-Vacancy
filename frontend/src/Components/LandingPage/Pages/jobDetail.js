@@ -4,7 +4,7 @@ import MainImage from './MainPage';
  function JobDetail(props){
 
    const Job=props.job
-   
+   console.log(Job);
     return(
       
         <React.Fragment>

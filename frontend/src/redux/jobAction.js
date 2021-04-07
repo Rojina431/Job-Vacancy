@@ -32,10 +32,7 @@ export const postJob=({name,jobRole,Salary,CompanyName,number,jobId})=>(dispatch
 //for getting jobList
 export const jobList=()=>(dispatch)=>{
 
-    const config={
-        headers:{'x-auth-token':localStorage.getItem('token')}
-    }
-   
+    var token=JSON.parse(localStorage.getItem('token'));
     axios.post('/api/jobs/getJobList')
     .then(response => {
         if (response.data.success) {

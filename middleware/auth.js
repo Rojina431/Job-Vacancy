@@ -3,11 +3,11 @@ const jwt=require('jsonwebtoken');
 
 
 function auth(req,res,next){
+    var bearerToken='';
     const Token=(req.headers['authorization']);
     if(typeof Token!=="undefined"){
          const bearer=Token.split(' ')
-         const bearerToken=bearer[1]
-         req.token=bearerToken
+         bearerToken=bearer[1]
          next();
          console.log(req.token)
     }else{
@@ -15,20 +15,20 @@ function auth(req,res,next){
     }
 
     //check for token
-    /*if(!req.token) {
+    if(!bearerToken) {
         res.statusCode=400;
         res.json({msg:"No token,authorization denied"});
     } 
 
     //verify token
     try{
-         const decode=jwt.verify(req.token,config.get('jwtSecret'))
+         const decode=jwt.verify(bearerToken,config.get('jwtSecret'))
          req.user=decode;
          next();
         }
     catch(e){
         res.status(400).json({msg:'Token is not valid'})
-    }    */
+    }    
 }
 
 ;

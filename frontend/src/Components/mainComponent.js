@@ -9,18 +9,24 @@ import JobDetail from './LandingPage/Pages/jobDetail';
 import AcceptPage from './LandingPage/appNavbar/accepted';
 import RejectedPage from './LandingPage/appNavbar/rejected';
 import PostedPage from './LandingPage/appNavbar/posted';
-import {connect} from 'react-redux'
+import {useSelector,useDispatch} from 'react-redux'
 import axios from 'axios';
 import LandingPage from './LandingPage/landing';
+import {jobList} from '../redux/jobAction'
 
 function MainPage() {
-const [Job,setJob]=useState([])
+//const [Job,setJob]=useState([props.job.jobs])
 
+const Job=useSelector(state=>state.job.jobs)
+const dispatch=useDispatch()
+console.log(Job)
 useEffect(()=>{
-  fetchClickedJob();
+  //fetchClickedJob();
+  dispatch(jobList())
+  
 },[])  
  
-const fetchClickedJob = () => {
+/*const fetchClickedJob = () => {
   axios.post('/api/jobs/getJobList')
   .then(response => {
       if (response.data.success) {
@@ -31,10 +37,11 @@ const fetchClickedJob = () => {
   }).catch(err=>{
     console.log(err)
   })
-}
+}*/
 
 const JobWithId=({match})=>{
 
+  console.log(match.params.jobId)
   return(
     <React.Fragment>
    <JobDetail job={Job.filter((job)=>job._id===match.params.jobId)} />
@@ -63,11 +70,4 @@ const JobWithId=({match})=>{
    
   );
 }
-const mapStateToProps=state=>({
- job:state.job,
- accept:state.accept
-})
-export default connect(
- mapStateToProps,
-  
-)(MainPage);
+export default MainPage;

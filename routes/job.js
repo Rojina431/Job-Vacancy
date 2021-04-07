@@ -47,18 +47,12 @@ jobRouter.route('/getPostedJob')
 })
 
 jobRouter.route('/getJobList')
-.post( auth, (req, res) => {
-jwt.verify(req.token,config.get('jwtSecret'),(err,data)=>{
-    if(err){
-        res.sendStatus(403)
-    }else{
+.post(  (req, res) => {
         Job.find()
         .exec((err, jobs) => {
             if (err) return res.status(400).json({ success: false, err })
             res.status(200).json({ success: true, jobs })
         })
-    }
-})
 })
 
 module.exports = jobRouter;
