@@ -1,7 +1,17 @@
 const express = require('express');
+const jwt = require('jsonwebtoken');
+const auth = require('../middleware/auth');
 const jobRouter = express.Router();
 const  Job  = require("../models/job");
+const config=require('config')
+const cors=require('cors');
 
+const issue2options = {
+    methods: ["POST"],
+    allowedHeaders:['Content-Type', 'Authorization']
+  };
+
+jobRouter.use(cors(issue2options))
 
 jobRouter.route('/postJob')
 .post( (req, res) => {
@@ -37,13 +47,18 @@ jobRouter.route('/getPostedJob')
 })
 
 jobRouter.route('/getJobList')
-.post(  (req, res) => {
-
-    Job.find()
-    .exec((err, jobs) => {
-        if (err) return res.status(400).json({ success: false, err })
-        res.status(200).json({ success: true, jobs })
-    })
+.post( auth, (req, res) => {
+jwt.verify(req.token,config.get('jwtSecret'),(err,data)=>{
+    if(err){
+        res.sendStatus(403)
+    }else{
+        Job.find()
+        .exec((err, jobs) => {
+            if (err) return res.status(400).json({ success: false, err })
+            res.status(200).json({ success: true, jobs })
+        })
+    }
+})
 })
 
 module.exports = jobRouter;

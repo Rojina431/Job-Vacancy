@@ -11,17 +11,18 @@ authRouter.use(bodyParser.json())
 //making router
 authRouter.route('/')
 .post((req,res,next)=>{
-     const {email,password}=req.body;
+     const {email,password,role}=req.body;
 
      //check whether any of the field is not filled
-     if(!email||!password){
+     if(!email||!password||!role){
           res.statusCode=400;
           res.json({msg:"Enter all field"});
      }
      //for if user exist or not
-     User.findOne({email})
+     User.findOne({email:email})
      .then(user=>{
          if (!user){
+             console.log(user)
              res.statusCode=400;
              res.json({msg:'User does not exist'})
          }

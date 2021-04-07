@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios';
 import {Row} from 'reactstrap';
-//import { faBusinessTime} from '@fortawesome/free-solid-svg-icons';
-//import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import GridImage from './cardJob';
 import { Fade} from 'react-animation-components';
 import './search.css';
@@ -12,7 +10,8 @@ function JobPage() {
 
     const [Job, setJob] = useState([])
     const [search,setSearch]=useState([])
- 
+    const [error,setError]=useState(false)
+
     useEffect(() => {
         fetchPostedJob();
 
@@ -20,7 +19,10 @@ function JobPage() {
 
 
     const fetchPostedJob = () => {
-        axios.post('/api/jobs/getJobList')
+        var token=JSON.parse(localStorage.getItem('token'));
+
+       const url='/api/jobs/getJobList'
+        axios.post('/api/jobs/getJobList',{}, {headers:{"Authorization":'Bearer'+' '+token}})
         .then(response => {
             if (response.data.success) {
                 localStorage.setItem("Job",JSON.stringify(response.data.jobs))
@@ -28,6 +30,8 @@ function JobPage() {
             } else {
                 alert('Failed to get posted job')
             }
+        }).catch((err)=>{
+            setError(true)
         })
     }
 
@@ -49,7 +53,7 @@ function JobPage() {
             <hr />
            <Fade in>
             <Row gutter={[16, 16]} >
-                      {Search(Job).map((job, index) => (
+                      {Job[0]?Search(Job).map((job, index) => (
                             <React.Fragment key={index}>
                                 <GridImage
                                     company={job.CompanyName}
@@ -58,7 +62,7 @@ function JobPage() {
                                     id={job._id}
                                 />
                             </React.Fragment>
-                        ))}
+                        )):(error)?<div>Login to get job list ....</div>:<div>Loading....</div>}
                 </Row>
                </Fade> 
         </div>

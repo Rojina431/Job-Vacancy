@@ -8,6 +8,7 @@ export const CLEAR_ERROR='CLEAR_ERROR';
 export const STATUS='STATUS';
 export const POST_SUCCESS='POST_SUCCESS'
 export const GET_SUCCESS='GET_SUCCESS'
+export const GET_JOB='GET_JOB';
 export const ADD_ACCEPT = 'ADD_ACCEPT';
 export const REMOVE_ACCEPT = 'REMOVE_ACCEPT';
 export const ADD_REJECT = 'ADD_REJECT';

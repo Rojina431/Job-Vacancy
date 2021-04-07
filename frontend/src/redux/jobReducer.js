@@ -2,7 +2,8 @@ import * as ActionTypes from './actionTypes';
 
 const initialState={
     job:localStorage.getItem("Jobs"),
-    isLoading:true
+    isLoading:true,
+    jobs:[]
 }
 
 export default function(state=initialState,action){
@@ -12,7 +13,21 @@ export default function(state=initialState,action){
                     ...state,
                    job:action.payload,
                     isLoading:false,
-                }             
+                }  
+            case ActionTypes.GET_JOB:
+                const getJob=action.payload
+                console.log(getJob)
+                return{
+                    ...state,
+                    jobs:getJob,
+                    isLoading:false
+                } 
+            case ActionTypes.GET_ERROR:
+                return{
+                    ...state,
+                    jobs:[],
+                    isLoading:true,
+                }                  
             default:
                 return state;             
     }
