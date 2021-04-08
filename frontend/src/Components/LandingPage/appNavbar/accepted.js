@@ -4,9 +4,13 @@ import {Table} from 'reactstrap';
 import { Fade} from 'react-animation-components';
 import { removeFavorite } from '../../../redux/acceptAction'
 import { connect } from "react-redux"; 
+import { Redirect } from 'react-router';
 
 function AcceptPage(props) {
 
+    const { isAuthenticated, status } = props
+
+    const [redirect,setRedirect]=useState([false])
     const [AcceptedJob, setAcceptedJob] = useState([])
     const [a,seta]=useState(props.accept)
     const variables = {
@@ -15,7 +19,20 @@ function AcceptPage(props) {
 
     useEffect(() => {
         fetchAccepted();
+        Direct();
     }, [])
+    
+    const  Direct=()=>{
+        if(isAuthenticated){
+            if(status==="Candidate"){
+                setRedirect(true)
+            }else{
+                setRedirect(false) ;
+             }
+        }else{
+           setRedirect(false) ;
+        }
+    }
 
     const fetchAccepted = () => {
         axios.post('/api/jobs/getAcceptedJob',variables)
@@ -57,7 +74,7 @@ function AcceptPage(props) {
                 Remove from the Accepted</button></td>
         </tr>
     })
-
+if(redirect){
     return (
         <div style={{ width: '85%', margin: '3rem auto' }} >
             <h3>Accepted Job</h3>
@@ -77,12 +94,18 @@ function AcceptPage(props) {
             </Table>
             </Fade>
         </div>
-    )
+    )}else{
+        return(
+            <Redirect to='/login'/>
+        )
+    }
 }
 
 
 const mapStateToProps = state => ({
-    accept:state.accept.accept
+    accept:state.accept.accept,
+    isAuthenticated: state.users.isAuthenticated,
+    status: state.status.status,
   });
   export default connect(
     mapStateToProps,{removeFavorite}

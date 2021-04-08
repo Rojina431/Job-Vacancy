@@ -2,12 +2,12 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios';
 import { Button } from 'reactstrap';
 import { postRejected,removeRejected } from '../../../redux/acceptAction'
-import { connect } from "react-redux"; 
+import { connect ,useSelector} from "react-redux"; 
 
 function Reject(props) {
 
     const [Rejected, setRejected] = useState(props.reject)
-    const [accepted,setaccepted]=useState(props.accept)
+    const accepted=useSelector(state=>state.accept.accept)
     const variables = {
         jobRole:props.jobRole,
         name:props.name,
@@ -79,7 +79,6 @@ function Reject(props) {
 }
 
 const mapStateToProps = state => ({
-    accept:state.accept.accept,
     reject:state.accept.reject
   });
   export default connect(

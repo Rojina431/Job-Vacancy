@@ -2,13 +2,12 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios';
 import { Button } from 'reactstrap';
 import { postFavorite,removeFavorite } from '../../../redux/acceptAction'
-import { connect } from "react-redux"; 
+import { connect ,useSelector} from "react-redux"; 
 
 function Accept(props) {
     
     const [Accepted, setAccepted] = useState(props.accept)
-    const [rejected, setrejected] = useState(props.reject)
-
+    const rejected=useSelector(state=>state.accept.reject)
     const variables = {
         jobRole:props.jobRole,
         name:props.name,
@@ -83,7 +82,6 @@ function Accept(props) {
 
 const mapStateToProps = state => ({
     accept:state.accept.accept,
-    reject:state.accept.reject
   });
   export default connect(
     mapStateToProps,{removeFavorite,postFavorite}

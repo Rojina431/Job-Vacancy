@@ -4,9 +4,13 @@ import {Table} from 'reactstrap';
 import { Fade} from 'react-animation-components';
 import { removeRejected } from '../../../redux/acceptAction'
 import { connect } from "react-redux";
+import { Redirect } from 'react-router';
 
 function RejectedPage(props) {
 
+    const { isAuthenticated, status } = props
+
+    const [redirect,setRedirect]=useState([false])
     const [RejectedJob, setRejectedJob] = useState([])
     const [r,setr]=useState(props.reject)
 
@@ -16,7 +20,20 @@ function RejectedPage(props) {
 
     useEffect(() => {
         fetchRejected();
+        Direct();
     }, [])
+    
+    const  Direct=()=>{
+        if(isAuthenticated){
+            if(status==="Candidate"){
+                setRedirect(true)
+            }else{
+                setRedirect(false) ;
+             }
+        }else{
+           setRedirect(false) ;
+        }
+    }  
 
     const fetchRejected = () => {
         axios.post('/api/jobs/getRejectedJob',variables)
@@ -58,6 +75,7 @@ function RejectedPage(props) {
         </tr>
     })
 
+    if(redirect){
     return (
         <div style={{ width: '85%', margin: '3rem auto' }} >
             <h3>Rejected Job</h3>
@@ -77,12 +95,18 @@ function RejectedPage(props) {
             </Table>
             </Fade>
         </div>
-    )
+    )}else{
+        return(
+            <Redirect to='/login'/>
+        )
+    }
 }
 
 
 const mapStateToProps = state => ({
-    reject:state.accept.reject
+    reject:state.accept.reject,
+    isAuthenticated: state.users.isAuthenticated,
+    status: state.status.status,
   });
   export default connect(
     mapStateToProps,{removeRejected}

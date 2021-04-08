@@ -3,6 +3,8 @@ import axios from 'axios';
 import {Table} from 'reactstrap';
 import '../../../App.css'
 import { Fade} from 'react-animation-components';
+import { shallowEqual,useSelector} from 'react-redux'
+import { Redirect } from 'react-router';
 
 function PostedPage() {
 
@@ -10,11 +12,30 @@ function PostedPage() {
        userFrom: JSON.parse(localStorage.getItem('creds')) 
     }
 
+    const { isAuthenticated, status } = useSelector(state => ({
+        isAuthenticated: state.users,
+        status: state.status,
+      }), shallowEqual);
+
     const [PostedJob, setPostedJob] = useState([])
+    const [redirect,setRedirect]=useState([false])
 
     useEffect(() => {
         fetchPosted();
-    }, [])
+    Direct();
+}, [])
+
+const  Direct=()=>{
+    if(isAuthenticated){
+        if(status.status==="Employee"){
+            setRedirect(true)
+        }else{
+            setRedirect(false) ;
+         }
+    }else{
+       setRedirect(false) ;
+    }
+}
 
     const fetchPosted = () => {
         axios.post('/api/jobs/getPostedJob',variable)
@@ -54,7 +75,7 @@ function PostedPage() {
                 Remove from the posted</button></td>
         </tr>
     })
-
+    if(redirect){
     return (
         <div style={{ width: '85%', margin: '3rem auto' }}>
             <h3>Posted Job</h3>
@@ -77,6 +98,11 @@ function PostedPage() {
             </Fade>
         </div>
     )
+}else{
+        return(
+            <Redirect to='/login'/>
+        )
+    }
 }
 
 
