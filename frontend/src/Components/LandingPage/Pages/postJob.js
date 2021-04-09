@@ -10,6 +10,7 @@ import {
   } from "reactstrap";
 import {v4 as uuid} from "uuid";
 import { FadeTransform} from 'react-animation-components';
+import { Redirect } from 'react-router';
 
 class PostJob extends Component{
 
@@ -19,6 +20,8 @@ state={
     jobRole:"",
     Salary:"",
     CompanyName:"",
+    //isAuthenticated:this.props.auth.isAuthenticated,
+    status:this.props.status.status
 }
 
 componentDidUpdate(prevProps) {
@@ -68,7 +71,7 @@ componentDidUpdate(prevProps) {
     };
    
     render(){
-    
+    if(this.state.status==="Employee"){
         return(
           <div className="container  mt-5" style={{width:"500px"}} >
        
@@ -135,14 +138,20 @@ componentDidUpdate(prevProps) {
                       </Form>
                       </FadeTransform>
              </div>          
-        )
+        )}
+        else{
+          return(
+            <Redirect to='/login'/>
+          )
+        }
     }
    
 }
 
 const mapStateToProps = state => ({
     error:state.error,
-    status:state.status
+    status:state.status,
+    auth:state.users
   });
   export default connect(
     mapStateToProps,{postJob}
