@@ -50,7 +50,6 @@ function Reject(props) {
             }
          else{
             if(!accepted){
-                console.log(accepted)
                 axios.post('/api/jobs/addToRejected', variables)
             .then(response => {
                 if (response.data.success) {
